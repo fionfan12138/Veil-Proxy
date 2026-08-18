@@ -1,0 +1,44 @@
+name: Veil
+options:
+  bundleIdPrefix: com.veil
+  deploymentTarget:
+    macOS: "13.0"
+  createIntermediateGroups: true
+
+targets:
+  Veil:
+    type: application
+    platform: macOS
+    sources:
+      - path: Veil
+        excludes:
+          - Core
+    # 兜底方案：若用 xcodegen 重新生成工程，需把内置 mihomo 二进制拷进 App Resources。
+    # （手写的 Veil.xcodeproj/project.pbxproj 里已有等价的 "Copy mihomo" 脚本阶段）
+    postCompileScripts:
+      - name: Copy mihomo
+        inputFiles:
+          - $(SRCROOT)/Veil/Core/mihomo
+          - $(SRCROOT)/Veil/Core/geoip.metadb
+        outputFiles:
+          - $(BUILT_PRODUCTS_DIR)/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/mihomo
+          - $(BUILT_PRODUCTS_DIR)/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/geoip.metadb
+        script: |
+          cp "${SRCROOT}/Veil/Core/mihomo" "${BUILT_PRODUCTS_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/mihomo"
+          chmod +x "${BUILT_PRODUCTS_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/mihomo"
+          cp "${SRCROOT}/Veil/Core/geoip.metadb" "${BUILT_PRODUCTS_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/geoip.metadb"
+    info:
+      path: Veil/Info.plist
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.veil.Veil
+        MARKETING_VERSION: "1.0"
+        CURRENT_PROJECT_VERSION: "1"
+        CODE_SIGN_IDENTITY: "-"
+        CODE_SIGN_STYLE: Automatic
+        ENABLE_APP_SANDBOX: NO
+        ENABLE_HARDENED_RUNTIME: NO
+        GENERATE_INFOPLIST_FILE: NO
+        SWIFT_VERSION: "5.0"
+        ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
