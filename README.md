@@ -14,6 +14,16 @@ Veil 是一款使用 **SwiftUI + AppKit** 开发的原生 macOS 代理客户端�
 
 **版本状态：v1.0 已完成并进入稳定维护,后续可能考虑开发2.0**
 
+## 界面预览
+
+**首页**
+
+![Veil 首页连接状态](screenshots/veil-overview.png)
+
+**设置**
+
+![Veil 设置页面](screenshots/veil-settings.png)
+
 ## 功能
 
 - **原生 macOS 体验**：SwiftUI 界面、系统菜单栏、深浅色外观、开机自启与常用快捷键。
