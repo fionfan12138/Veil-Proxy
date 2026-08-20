@@ -80,7 +80,7 @@ struct SidebarView: View {
             Spacer(minLength: 0)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-        .background(VisualEffectView(targetAppearance: appState.settings.appearance.nsAppearance))
+        .background(VisualEffectView())
         .navigationSplitViewColumnWidth(min: 180, ideal: 220, max: 280)
     }
 }
@@ -118,21 +118,15 @@ private struct SidebarRow: View {
 }
 
 /// 让侧边栏带原生半透明材质（.sidebar）。
-/// 显式传外观：NSVisualEffectView 不会随 preferredColorScheme 及时切换，
-/// 外观变化后如不显式设置会残留旧外观（深色切回浅色时侧边栏仍深）。
+/// 外观统一继承 NSApp.appearance，避免与 SwiftUI 形成两套互相冲突的覆盖。
 private struct VisualEffectView: NSViewRepresentable {
-    let targetAppearance: NSAppearance?
-
     func makeNSView(context: Context) -> NSVisualEffectView {
         let view = NSVisualEffectView()
         view.material = .sidebar
         view.blendingMode = .behindWindow
         view.state = .followsWindowActiveState
-        view.appearance = targetAppearance
         return view
     }
 
-    func updateNSView(_ nsView: NSVisualEffectView, context: Context) {
-        nsView.appearance = targetAppearance
-    }
+    func updateNSView(_ nsView: NSVisualEffectView, context: Context) {}
 }

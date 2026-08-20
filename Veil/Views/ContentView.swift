@@ -1,26 +1,5 @@
 import SwiftUI
 
-extension AppAppearance {
-    /// 映射为 preferredColorScheme 参数（nil = 跟随系统）
-    var preferredColorScheme: ColorScheme? {
-        switch self {
-        case .system: return nil
-        case .light: return .light
-        case .dark: return .dark
-        }
-    }
-
-    /// 映射为 NSAppearance（nil = 跟随系统）；显式传给 NSVisualEffectView，
-    /// 毛玻璃视图不会随 preferredColorScheme 及时换外观
-    var nsAppearance: NSAppearance? {
-        switch self {
-        case .system: return nil
-        case .light: return NSAppearance(named: .aqua)
-        case .dark: return NSAppearance(named: .darkAqua)
-        }
-    }
-}
-
 /// 主窗口根视图：侧边栏 + 详情
 struct ContentView: View {
     @EnvironmentObject private var appState: AppState
@@ -47,8 +26,6 @@ struct ContentView: View {
             }
         }
         .animation(.easeInOut(duration: 0.2), value: appState.toastMessage)
-        // 外观设置：跟随系统 / 浅色 / 深色
-        .preferredColorScheme(appState.settings.appearance.preferredColorScheme)
         .onAppear {
             appState.setMainWindowVisible(true)
             // 菜单栏「打开主界面」经此闭包重建/激活窗口
